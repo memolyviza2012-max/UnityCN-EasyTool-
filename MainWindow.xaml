@@ -17,8 +17,8 @@
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition MinHeight="160" Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="120"/>
@@ -50,9 +50,9 @@
             </StackPanel>
         </materialDesign:Card>
 
-        <!-- Drag and Drop Zone -->
+        <!-- Drag and Drop Zone (Row 1 is an 8px spacer; Row 2 has MinHeight=160 to prevent collapse) -->
         <materialDesign:Card Grid.Row="2" Margin="0,0,0,16" Background="{DynamicResource MaterialDesignDarkSeparatorBackground}">
-            <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2" CornerRadius="4" Margin="4">
+            <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2" CornerRadius="4" Margin="4" MinHeight="160">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                     <materialDesign:PackIcon Kind="FolderUpload" Width="64" Height="64" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
                     <TextBlock Text="Drag &amp; Drop Files or Folders Here" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,16,0,8"/>

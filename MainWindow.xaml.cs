@@ -11,8 +11,8 @@ namespace UnityCNEasyTool
 {
     public class GameInfo
     {
-        public string Name { get; set; }
-        public string Key { get; set; }
+        public required string Name { get; set; }
+        public required string Key { get; set; }
     }
 
     public partial class MainWindow : Window
@@ -176,16 +176,19 @@ namespace UnityCNEasyTool
                         RunProcess(exePath, file, outPath, key, isEncrypt, false);
                         
                         current++;
+                        // Capture current value by copy to avoid closure bug on loop variable
+                        int snapshot = current;
                         Dispatcher.Invoke(() =>
                         {
-                            WorkProgressBar.Value = (current / (double)total) * 100;
-                            StatusText.Text = $"Status: {current}/{total} processed";
+                            WorkProgressBar.Value = (snapshot / (double)total) * 100;
+                            StatusText.Text = $"Status: {snapshot}/{total} processed";
                         });
                     }
                 }
             });
 
             Log("✅ Operation completed!");
+            // UI update must happen on UI thread — this is already on the awaited (UI) thread
             StatusText.Text = "Status: Done";
             StartButton.IsEnabled = true;
         }
@@ -209,7 +212,13 @@ namespace UnityCNEasyTool
                 WorkingDirectory = Path.GetDirectoryName(exePath)
             };
 
-            using (Process process = Process.Start(psi))
+            Process? process = Process.Start(psi);
+            if (process == null)
+            {
+                Log("ERROR: Failed to start UnityCN-Helper process.");
+                return;
+            }
+            using (process)
             {
                 process.OutputDataReceived += (s, e) => { if (e.Data != null) Log(e.Data); };
                 process.ErrorDataReceived += (s, e) => { if (e.Data != null) Log("ERR: " + e.Data); };
